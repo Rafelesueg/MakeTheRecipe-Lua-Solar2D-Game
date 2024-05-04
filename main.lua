@@ -1,18 +1,28 @@
-local piatti = {"Carbonara", "Pizza Margherita", "Insalata Caesar", "Risotto ai funghi", "Tiramisù", 
-                "Hamburger con patatine fritte", "Sushi assortito", "Lasagne al forno", "Tagliatelle al ragù", "Gelato al cioccolato"}
+local piatti = {"Carbonara", "Pizza Margherita", "Risotto ai funghi", "Tiramisù", 
+                "Hamburger con patatine fritte", "Sushi assortito", "Lasagne al forno", "Tagliatelle al ragù", "Gelato al cioccolato",
+                "Spaghetti Aglio, Olio e Peperoncino", "Bruschetta al Pomodoro", "Caprese Salad", "Pasta al Pesto",
+                "Insalata di Pollo Caesar", "Pasta alla Puttanesca", "Frittata di Verdure", "Risotto al Limone"}
 
 local ingredienti = {
     ["Carbonara"] = {"Spaghetti", "Uova", "Guanciale", "Pecorino romano"},
     ["Pizza Margherita"] = {"Pizza base", "Salsa di pomodoro", "Mozzarella", "Basilico"},
-    ["Insalata Caesar"] = {"Lattuga", "Croutons", "Parmigiano", "Salsa Caesar"},
     ["Risotto ai funghi"] = {"Riso", "Funghi", "Brodo", "Burro"},
     ["Tiramisù"] = {"Savoiardi", "Mascarpone", "Caffè", "Cacao"},
     ["Hamburger con patatine fritte"] = {"Pane per hamburger", "Hamburger di carne", "Lattuga", "Pomodoro"},
     ["Sushi assortito"] = {"Riso per sushi", "Pesce crudo", "Alga nori", "Wasabi"},
     ["Lasagne al forno"] = {"Pasta per lasagne", "Ragù", "Besciamella", "Parmigiano"},
     ["Tagliatelle al ragù"] = {"Tagliatelle", "Ragù", "Pecorino romano", "Pepe"},
-    ["Gelato al cioccolato"] = {"Latte", "Panna", "Cioccolato", "Zucchero"}
+    ["Gelato al cioccolato"] = {"Latte", "Panna", "Cioccolato", "Zucchero"},
+    ["Spaghetti Aglio, Olio e Peperoncino"] = {"Spaghetti", "Aglio", "Olio d'oliva", "Peperoncino"},
+    ["Bruschetta al Pomodoro"] = {"Pane rustico", "Pomodori maturi", "Aglio", "Basilico fresco"},
+    ["Caprese Salad"] = {"Pomodori", "Mozzarella di bufala", "Basilico", "Olio d'oliva extra vergine"},
+    ["Pasta al Pesto"] = {"Pasta", "Basilico fresco", "Olio d'oliva", "Pinoli"},
+    ["Insalata di Pollo Caesar"] = {"Lattuga romana", "Petto di pollo grigliato", "Crostini di pane", "Salsa Caesar"},
+    ["Pasta alla Puttanesca"] = {"Pasta", "Pomodori pelati", "Acciughe sott'olio", "Olive nere"},
+    ["Frittata di Verdure"] = {"Uova", "Zucchine", "Pomodori", "Cipolla"},
+    ["Risotto al Limone"] = {"Riso Arborio", "Limone", "Brodo vegetale", "Parmigiano grattugiato"}
 }
+
 
 -- Funzione per mischiare un'array
 local function shuffle(t)
@@ -27,7 +37,7 @@ end
 
 local livello = 1
 local punteggio = 0
-local tempo_disponibile = 5
+local tempo_disponibile = 10
 local tempo_attuale = tempo_disponibile
 local ingredientiText = {}
 local ingredientiInseriti = {}
@@ -55,8 +65,15 @@ local function rimuoviTimer()
     end
 end
 
-local function avviaLivello()
+local screenWidth = display.contentWidth
+local screenHeight = display.contentHeight
+local centerX = screenWidth/2
+local centerY = screenHeight/2
 
+local function avviaLivello()
+    local background = display.newImageRect("bg.jpeg", screenWidth, screenHeight) -- Imposta la dimensione appropriata
+    background.x = centerX
+    background.y = centerY
     -- Rimuovi gli oggetti di visualizzazione degli ingredienti dal livello precedente
     rimuoviIngredienti()
 
@@ -79,12 +96,12 @@ local function avviaLivello()
     end
 
     -- Visualizzazione del punteggio e del timer al centro dello schermo
-    punteggioText = display.newText("Punteggio: " .. punteggio, display.contentCenterX, display.contentCenterY - 150, "Gameplay.ttf", 20)
-    punteggioText:setFillColor(0,0,102)
-    lvlText = display.newText("Livello: " .. livello, display.contentCenterX, display.contentCenterY - 100, "Gameplay.ttf", 20)
+    punteggioText = display.newText("Punteggio: " .. punteggio, display.contentCenterX - 100, display.contentCenterY - 225, "Gameplay.ttf", 12)
+
+    lvlText = display.newText("Livello: " .. livello, display.contentCenterX + 110, display.contentCenterY - 225, "Gameplay.ttf", 12)
     
     -- Inizializzazione del testo della ricetta
-    ricettaText = display.newText("" .. piatti[livello], display.contentCenterX, display.contentCenterY - 20, "Gameplay.ttf", 16)
+    ricettaText = display.newText("" .. piatti[livello], display.contentCenterX + 5 , display.contentCenterY - 35, "Gameplay.ttf", 16)
     ricettaText:setFillColor(204, 102, 0)
 
     local ingredientiMischiati = {}
@@ -104,10 +121,10 @@ local function avviaLivello()
                     tuttiPresenti = false
                     timer.cancel(timerDiConteggio)
                     rimuoviIngredienti()
-                    local failText = display.newText("Ordine sbagliato! Hai perso.", display.contentCenterX, display.contentCenterY, "Gameplay.ttf", 16)
+                    local failText = display.newText("Ordine sbagliato!", display.contentCenterX, display.contentCenterY + 20, "Gameplay.ttf", 16)
                     failText:setFillColor(1, 0, 0)
-                    local ricominciaButton = display.newText("Ricomincia", display.contentCenterX, display.contentCenterY + 50, "Gameplay.ttf", 20)
-                    ricominciaButton:setFillColor(0, 1, 0)
+                    local ricominciaButton = display.newText("Ricomincia", display.contentCenterX, display.contentCenterY + 40, "Gameplay.ttf", 18)
+                    
                     ricominciaButton:addEventListener("tap", function(event)
                         rimuoviIngredienti()
                         punteggio = 0
@@ -131,11 +148,11 @@ local function avviaLivello()
                 if livello <= #piatti then
                     avviaLivello()
                 else
-                    local winText = display.newText("Congratulazioni! Hai vinto!", display.contentCenterX, display.contentCenterY, "Gameplay.ttf", 18)
+                    local winText = display.newText("Hai vinto!", display.contentCenterX, display.contentCenterY + 20, "Gameplay.ttf", 18)
                     rimuoviIngredienti()
                     winText:setFillColor(0, 1, 0)
-                    local ricominciaButton = display.newText("Ricomincia", display.contentCenterX, display.contentCenterY + 50, "Gameplay.ttf", 20)
-                    ricominciaButton:setFillColor(0, 1, 0)
+                    local ricominciaButton = display.newText("Ricomincia", display.contentCenterX, display.contentCenterY + 40, "Gameplay.ttf", 20)
+                    
                     ricominciaButton:addEventListener("tap", function(event)
                         rimuoviIngredienti()
                         punteggio = 0
@@ -154,11 +171,11 @@ local function avviaLivello()
     end
 
     local posY = display.contentCenterY
-    local posX = display.contentCenterX - 80
+    local posX = display.contentCenterX - 50
     for i, ingrediente in ipairs(ingredientiMischiati) do
-        local ingredienteText = display.newText("" .. ingrediente, posX, posY, "Gameplay.ttf", 16)
+        local ingredienteText = display.newText("" .. ingrediente, posX, posY, "Gameplay.ttf", 8)
         ingredienteText.anchorX = 0
-        ingredienteText:setFillColor(0.8, 0.8, 0.8)
+        ingredienteText:setFillColor(39, 135, 124)
         table.insert(ingredientiText, ingredienteText)       
         ingredienteText.isEnabled = true  -- Aggiungi un campo per tenere traccia dello stato dell'oggetto
         ingredienteText:addEventListener("tap", function(event)
@@ -183,17 +200,17 @@ local function avviaLivello()
     else
         tempo_attuale = tempo_disponibile
     end
-    tempoText = display.newText("Tempo: " .. tempo_attuale, display.contentCenterX, display.contentCenterY - 125, "Gameplay.ttf", 20)
+    tempoText = display.newText("Tempo: " .. tempo_attuale, display.contentCenterX + 10, display.contentCenterY - 225, "Gameplay.ttf", 12)
     timerDiConteggio = timer.performWithDelay(1000, function()
         tempo_attuale = tempo_attuale - 1
         tempoText.text = "Tempo: " .. tempo_attuale
         if tempo_attuale <= 0 then
             -- Visualizza il messaggio "Tempo Scaduto"
             rimuoviIngredienti()
-            local tempoScadutoText = display.newText("Tempo Scaduto", display.contentCenterX, display.contentCenterY - 20, "Gameplay.ttf", 20)
+            local tempoScadutoText = display.newText("Tempo Scaduto", display.contentCenterX, display.contentCenterY + 20, "Gameplay.ttf", 20)
             tempoScadutoText:setFillColor(1, 0, 0)
-            local ricominciaButton = display.newText("Ricomincia", display.contentCenterX, display.contentCenterY + 50, "Gameplay.ttf", 20)
-            ricominciaButton:setFillColor(0, 1, 0)
+            local ricominciaButton = display.newText("Ricomincia", display.contentCenterX, display.contentCenterY + 40, "Gameplay.ttf", 20)
+            
             ricominciaButton:addEventListener("tap", function(event)
                 tempo_attuale = tempo_disponibile
                 punteggio = 0
@@ -217,28 +234,37 @@ end
 local function mostraSchermataCaricamento()
     -- Creazione della schermata di caricamento
     local loadingBackground = display.newRect(display.contentCenterX, display.contentCenterY, display.actualContentWidth, display.actualContentHeight)
-    loadingBackground:setFillColor(0) -- Imposta il colore di sfondo su nero
+    loadingBackground:setFillColor(1) -- Imposta il colore di sfondo su nero
 
-    local loadingText = display.newText("Caricamento...", display.contentCenterX, display.contentCenterY, "Gameplay.ttf", 12)
-    loadingText:setFillColor(1) -- Imposta il colore del testo su bianco o qualsiasi altro colore visibile
-    local loadingText2 = display.newText("Corso di Laurea in", display.contentCenterX, display.contentCenterY + 50, "Gameplay.ttf", 14)
-    loadingText2:setFillColor(1) -- Imposta il colore del testo su bianco o qualsiasi altro colore visibile
-    local loadingText3 = display.newText("Scienze e Tecnologie Multimediali", display.contentCenterX, display.contentCenterY + 70, "Gameplay.ttf", 14)
-    loadingText3:setFillColor(1) -- Imposta il colore del testo su bianco o qualsiasi altro colore visibile
+    local uniLogo = display.newImageRect("logo.png", 100, 100) -- Imposta la dimensione appropriata
+    uniLogo.anchorX = 0
+    uniLogo.x = display.contentCenterY - 130
+    uniLogo.y = display.contentCenterX - 100
+    local creditText = display.newText("dev by Michele Galuzzo", display.contentCenterX, display.contentCenterY + 100, "Gameplay.ttf", 10)
+    creditText:setFillColor(0) -- Imposta il colore del testo su bianco o qualsiasi altro colore visibile
+    local loadingText = display.newText("Caricamento...", display.contentCenterX, display.contentCenterY, "Gameplay.ttf", 14)
+    loadingText:setFillColor(0) -- Imposta il colore del testo su bianco o qualsiasi altro colore visibile
+    local loadingText2 = display.newText("Corso di Laurea in", display.contentCenterX, display.contentCenterY - 100, "Gameplay.ttf", 12)
+    loadingText2:setFillColor(0) -- Imposta il colore del testo su bianco o qualsiasi altro colore visibile
+    local loadingText3 = display.newText("Scienze e Tecnologie Multimediali", display.contentCenterX, display.contentCenterY - 80, "Gameplay.ttf", 12)
+    loadingText3:setFillColor(0) -- Imposta il colore del testo su bianco o qualsiasi altro colore visibile
 
     -- Funzione per nascondere la schermata di caricamento e avviare il gioco
     local function avviaGioco()
         -- Rimuovi gli oggetti della schermata di caricamento
-        loadingBackground:removeSelf()
+        uniLogo:removeSelf()
         loadingText:removeSelf()
         loadingText2:removeSelf()
         loadingText3:removeSelf()
-        
-        local startText = display.newText("INIZIA", display.contentCenterX, display.contentCenterY, "Gameplay.ttf", 12)
-        loadingText:setFillColor(1) -- Imposta il colore del testo su bianco o qualsiasi altro colore visibile
+        creditText:removeSelf()
+        local tutorialtText = display.newText("inserisci nell'ordine giusto per preparare la ricetta", display.contentCenterX, display.contentCenterY - 50, "Gameplay.ttf", 8)
+        tutorialtText:setFillColor(0) -- Imposta il colore del testo su bianco o qualsiasi altro colore visibile
+        local startText = display.newText("INIZIA", display.contentCenterX, display.contentCenterY, "Gameplay.ttf", 20)
+        startText:setFillColor(0) -- Imposta il colore del testo su bianco o qualsiasi altro colore visibile
         startText:addEventListener("tap", function(event)
             avviaLivello()
             startText:removeSelf()
+            loadingBackground:removeSelf()
         end)
     end
 

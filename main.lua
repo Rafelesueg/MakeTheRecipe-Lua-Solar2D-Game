@@ -24,7 +24,7 @@ local ingredienti = {
 }
 
 
--- Funzione per mischiare un'array
+-- Funzione per mischiare gli ingredienti e renderli randomici ogni volta
 local function shuffle(t)
     local n = #t
     while n > 2 do
@@ -44,6 +44,7 @@ local ingredientiInseriti = {}
 local count = 1
 local ricettaText = nil
 
+-- Funzione per rimuovere gli ingredienti quando c'è bisogno di rimuovere la lista in caso di tempo scaduto o di errore.
 local function rimuoviIngredienti()
     for i = 1, #ingredientiText do
         ingredientiText[i]:removeSelf()
@@ -55,9 +56,10 @@ local function rimuoviIngredienti()
     end
 end
 
-local timerDiConteggio -- Variabile globale per il timer
-local tempo_iniziale -- Memorizza il tempo iniziale per il livello corrente
+-- Variabili per il timer
+local timerDiConteggio 
 
+-- Funzione per rimuovere il timer quando viene richiamato l'avvio del livello, per evitare che il tempo scorra più velocemente
 local function rimuoviTimer()
     if timerDiConteggio then
         timer.cancel(timerDiConteggio)
@@ -65,6 +67,7 @@ local function rimuoviTimer()
     end
 end
 
+-- Variabili comode per aggiustare la posizione degli elementi
 local screenWidth = display.contentWidth
 local screenHeight = display.contentHeight
 local centerX = screenWidth/2
@@ -77,7 +80,7 @@ local function avviaLivello()
     -- Rimuovi gli oggetti di visualizzazione degli ingredienti dal livello precedente
     rimuoviIngredienti()
 
-    -- Rimuovere gli oggetti di visualizzazione del punteggio e del tempo dal livello precedente
+    -- Rimuovere gli oggetti di visualizzazione del: punteggio,tempo,livello e ricetta dal livello precedente
     if punteggioText then
         punteggioText:removeSelf()
         punteggioText = nil
@@ -95,28 +98,29 @@ local function avviaLivello()
         ricettaText = nil
     end
 
-    -- Visualizzazione del punteggio e del timer al centro dello schermo
+    -- Visualizzazione del punteggio, livello e ricetta
     punteggioText = display.newText("Punteggio: " .. punteggio, display.contentCenterX - 100, display.contentCenterY - 225, "Gameplay.ttf", 12)
-
     lvlText = display.newText("Livello: " .. livello, display.contentCenterX + 110, display.contentCenterY - 225, "Gameplay.ttf", 12)
-    
-    -- Inizializzazione del testo della ricetta
     ricettaText = display.newText("" .. piatti[livello], display.contentCenterX + 5 , display.contentCenterY - 35, "Gameplay.ttf", 16)
     ricettaText:setFillColor(204, 102, 0)
 
+    -- Dichiaro gli alimenti da mischiare e li inserisco in questa table e richiamo il metodo creato sopra shuffle()
     local ingredientiMischiati = {}
     for _, ingrediente in ipairs(ingredienti[piatti[livello]]) do
         table.insert(ingredientiMischiati, ingrediente)
     end
     shuffle(ingredientiMischiati)
 
+    -- Funzione per controllare che gli ingredienti selezionati siano nella stessa posizione della lista normalmente ordinata
     local function controllaIngredientiSelezionati()
+        -- Controllo se gli elementi inseriti sono tutti e procedo
         if #ingredientiInseriti == #ingredienti[piatti[livello]] then
             local ingredientiRichiesti = ingredienti[piatti[livello]]
             local tuttiPresenti = true
             
-            -- Verifica che tutti gli ingredienti inseriti siano corretti e nella stessa posizione di quelli richiesti
+            -- Verifica che tutti gli ingredienti inseriti siano corretti e nella stessa posizione della ricetta
             for i, ingrediente in ipairs(ingredientiInseriti) do
+                -- Gestione errore e tasto ricomincia
                 if ingredientiInseriti[i] ~= ingredientiRichiesti[i] then
                     tuttiPresenti = false
                     timer.cancel(timerDiConteggio)
@@ -138,7 +142,7 @@ local function avviaLivello()
                     end)
                 end
             end
-
+                -- Gestione avanzamento livello
             if tuttiPresenti then
                 punteggio = punteggio + 10
                 livello = livello + 1
@@ -148,6 +152,7 @@ local function avviaLivello()
                 if livello <= #piatti then
                     avviaLivello()
                 else
+                    -- Gestione vittoria e tasto ricomincia
                     local winText = display.newText("Hai vinto!", display.contentCenterX, display.contentCenterY + 20, "Gameplay.ttf", 18)
                     rimuoviIngredienti()
                     winText:setFillColor(0, 1, 0)
@@ -170,6 +175,7 @@ local function avviaLivello()
         end
     end
 
+    -- Generazione lista attraverso l'iterazione della lista ingredientiMischiati
     local posY = display.contentCenterY
     local posX = display.contentCenterX - 50
     for i, ingrediente in ipairs(ingredientiMischiati) do
@@ -177,29 +183,23 @@ local function avviaLivello()
         ingredienteText.anchorX = 0
         ingredienteText:setFillColor(39, 135, 124)
         table.insert(ingredientiText, ingredienteText)       
-        ingredienteText.isEnabled = true  -- Aggiungi un campo per tenere traccia dello stato dell'oggetto
+        ingredienteText.isEnabled = true  -- Campo per tenere traccia dello stato dell'oggetto
         ingredienteText:addEventListener("tap", function(event)
             if ingredienteText.isEnabled then  -- Controlla se l'oggetto è abilitato
                 ingredientiInseriti[count] = ingrediente
                 ingredienteText:setFillColor(0.5, 0.5, 0.5)
                 controllaIngredientiSelezionati()
                 count = count + 1
-                ingredienteText.isEnabled = false  -- Disabilita l'oggetto dopo il clic
+                ingredienteText.isEnabled = false  -- Disabilita l'oggetto dopo il clic, un debug per non fare inserire più volte lo stesso ingrediente
             end
         end)
         
         posY = posY + 20
     end
 
-    -- Interrompi il timer se è già attivo
+    -- Gestione del tempo, resetto il timer ad ogni avanzamento di livello con la funzione rimuoviTimer() e proseguo con la stampa del tempo e con la gestione del tempo scaduto
     rimuoviTimer()
-
-    -- Riavvia il timer
-    if tempo_iniziale then
-        tempo_attuale = tempo_iniziale
-    else
-        tempo_attuale = tempo_disponibile
-    end
+    tempo_attuale = tempo_disponibile
     tempoText = display.newText("Tempo: " .. tempo_attuale, display.contentCenterX + 10, display.contentCenterY - 225, "Gameplay.ttf", 12)
     timerDiConteggio = timer.performWithDelay(1000, function()
         tempo_attuale = tempo_attuale - 1
@@ -229,25 +229,25 @@ local function avviaLivello()
     end, tempo_attuale)
 end
 
---[[ avviaLivello() -- Avvia il primo livello ]]
+-- Boot prima del gioco, scheramata di caricamento con citazione al corso di studi e all'Ateneo
 
 local function mostraSchermataCaricamento()
     -- Creazione della schermata di caricamento
     local loadingBackground = display.newRect(display.contentCenterX, display.contentCenterY, display.actualContentWidth, display.actualContentHeight)
-    loadingBackground:setFillColor(1) -- Imposta il colore di sfondo su nero
+    loadingBackground:setFillColor(1)
 
-    local uniLogo = display.newImageRect("logo.png", 100, 100) -- Imposta la dimensione appropriata
+    local uniLogo = display.newImageRect("logo.png", 100, 100)
     uniLogo.anchorX = 0
     uniLogo.x = display.contentCenterY - 130
     uniLogo.y = display.contentCenterX - 100
     local creditText = display.newText("dev by Michele Galuzzo", display.contentCenterX, display.contentCenterY + 100, "Gameplay.ttf", 10)
-    creditText:setFillColor(0) -- Imposta il colore del testo su bianco o qualsiasi altro colore visibile
+    creditText:setFillColor(0) 
     local loadingText = display.newText("Caricamento...", display.contentCenterX, display.contentCenterY, "Gameplay.ttf", 14)
-    loadingText:setFillColor(0) -- Imposta il colore del testo su bianco o qualsiasi altro colore visibile
+    loadingText:setFillColor(0) 
     local loadingText2 = display.newText("Corso di Laurea in", display.contentCenterX, display.contentCenterY - 100, "Gameplay.ttf", 12)
-    loadingText2:setFillColor(0) -- Imposta il colore del testo su bianco o qualsiasi altro colore visibile
+    loadingText2:setFillColor(0) 
     local loadingText3 = display.newText("Scienze e Tecnologie Multimediali", display.contentCenterX, display.contentCenterY - 80, "Gameplay.ttf", 12)
-    loadingText3:setFillColor(0) -- Imposta il colore del testo su bianco o qualsiasi altro colore visibile
+    loadingText3:setFillColor(0) 
 
     -- Funzione per nascondere la schermata di caricamento e avviare il gioco
     local function avviaGioco()
@@ -257,10 +257,12 @@ local function mostraSchermataCaricamento()
         loadingText2:removeSelf()
         loadingText3:removeSelf()
         creditText:removeSelf()
+
         local tutorialtText = display.newText("inserisci nell'ordine giusto per preparare la ricetta", display.contentCenterX, display.contentCenterY - 50, "Gameplay.ttf", 8)
-        tutorialtText:setFillColor(0) -- Imposta il colore del testo su bianco o qualsiasi altro colore visibile
+        tutorialtText:setFillColor(0) 
         local startText = display.newText("INIZIA", display.contentCenterX, display.contentCenterY, "Gameplay.ttf", 20)
-        startText:setFillColor(0) -- Imposta il colore del testo su bianco o qualsiasi altro colore visibile
+        startText:setFillColor(0) 
+
         startText:addEventListener("tap", function(event)
             avviaLivello()
             startText:removeSelf()
@@ -268,7 +270,7 @@ local function mostraSchermataCaricamento()
         end)
     end
 
-    -- Avvia il gioco dopo un breve ritardo (ad esempio, 1 secondo)
+    -- Avvia la funzione avviaGioco() dopo un breve ritardo
     timer.performWithDelay(5000, avviaGioco)
 end
 

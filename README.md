@@ -75,5 +75,6 @@ main.lua: riga 6-24
     ["Frittata di Verdure"] = {"Uova", "Zucchine", "Pomodori", "Cipolla"},
     ["Risotto al Limone"] = {"Riso Arborio", "Limone", "Brodo vegetale", "Parmigiano grattugiato"}
 
+
 > [!NOTE]
-> Gioco programmato in LUA con l'engine Corona based in Solar2D, tutto il codice è frutto di studio e ricerca online, l'immagine sfondo del gioco è stata generata dall'intelligenza artificiale Copilot by Microsoft.
+> Gioco programmato in LUA con l'engine Corona based in Solar2D, tutto il codice è frutto di studio e ricerca online, il font utilizzato è "Gameplay" scaricato gratuitamente da [Dafont.com](https://www.dafont.com/gameplay.font) l'immagine sfondo del gioco è stata generata dall'intelligenza artificiale [Copilot by Microsoft](https://copilot.microsoft.com/).

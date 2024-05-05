@@ -74,7 +74,7 @@ local centerX = screenWidth/2
 local centerY = screenHeight/2
 
 local function avviaLivello()
-    local background = display.newImageRect("images/bg.jpeg", screenWidth, screenHeight) -- Imposta la dimensione appropriata
+    local background = display.newImageRect("Images.xcassets/bg.jpeg", screenWidth, screenHeight) -- Imposta la dimensione appropriata
     background.x = centerX
     background.y = centerY
     -- Rimuovi gli oggetti di visualizzazione degli ingredienti dal livello precedente
@@ -236,7 +236,7 @@ local function mostraSchermataCaricamento()
     local loadingBackground = display.newRect(display.contentCenterX, display.contentCenterY, display.actualContentWidth, display.actualContentHeight)
     loadingBackground:setFillColor(1)
 
-    local uniLogo = display.newImageRect("images/logo.png", 100, 100)
+    local uniLogo = display.newImageRect("Images.xcassets/logo.png", 100, 100)
     uniLogo.anchorX = 0
     uniLogo.x = display.contentCenterY - 130
     uniLogo.y = display.contentCenterX - 100

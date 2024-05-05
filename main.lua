@@ -1,5 +1,5 @@
 local piatti = {"Carbonara", "Pizza Margherita", "Risotto ai funghi", "Tiramisù", 
-                "Hamburger con patatine fritte", "Sushi assortito", "Lasagne al forno", "Tagliatelle al ragù", "Gelato al cioccolato",
+                "Hamburger", "Sushi assortito", "Lasagne al forno", "Tagliatelle", "Gelato al cioccolato",
                 "Spaghetti Aglio, Olio e Peperoncino", "Bruschetta al Pomodoro", "Caprese Salad", "Pasta al Pesto",
                 "Insalata di Pollo Caesar", "Pasta alla Puttanesca", "Frittata di Verdure", "Risotto al Limone"}
 
@@ -8,10 +8,10 @@ local ingredienti = {
     ["Pizza Margherita"] = {"Pizza base", "Salsa di pomodoro", "Mozzarella", "Basilico"},
     ["Risotto ai funghi"] = {"Riso", "Funghi", "Brodo", "Burro"},
     ["Tiramisù"] = {"Savoiardi", "Mascarpone", "Caffè", "Cacao"},
-    ["Hamburger con patatine fritte"] = {"Pane per hamburger", "Hamburger di carne", "Lattuga", "Pomodoro"},
+    ["Hamburger"] = {"Pane per hamburger", "Hamburger di carne", "Lattuga", "Pomodoro"},
     ["Sushi assortito"] = {"Riso per sushi", "Pesce crudo", "Alga nori", "Wasabi"},
     ["Lasagne al forno"] = {"Pasta per lasagne", "Ragù", "Besciamella", "Parmigiano"},
-    ["Tagliatelle al ragù"] = {"Tagliatelle", "Ragù", "Pecorino romano", "Pepe"},
+    ["Tagliatelle"] = {"Tagliatelle", "Ragù", "Pecorino romano", "Pepe"},
     ["Gelato al cioccolato"] = {"Latte", "Panna", "Cioccolato", "Zucchero"},
     ["Spaghetti Aglio, Olio e Peperoncino"] = {"Spaghetti", "Aglio", "Olio d'oliva", "Peperoncino"},
     ["Bruschetta al Pomodoro"] = {"Pane rustico", "Pomodori maturi", "Aglio", "Basilico fresco"},

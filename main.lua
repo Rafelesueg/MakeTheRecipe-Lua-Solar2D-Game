@@ -1,7 +1,7 @@
 local piatti = {"Carbonara", "Pizza Margherita", "Risotto ai funghi", "Tiramisù", 
                 "Hamburger", "Sushi assortito", "Lasagne al forno", "Tagliatelle", "Gelato al cioccolato",
                 "Aglio, Olio e Peperoncino", "Bruschetta al Pomodoro", "Caprese Salad", "Pasta al Pesto",
-                "Insalata di Pollo Caesar", "Pasta alla Puttanesca", "Frittata di Verdure", "Risotto al Limone"}
+                "Insalata Caesar", "Pasta alla Puttanesca", "Frittata di Verdure", "Risotto al Limone"}
 
 local ingredienti = {
     ["Carbonara"] = {"Spaghetti", "Uova", "Guanciale", "Pecorino romano"},
@@ -17,7 +17,7 @@ local ingredienti = {
     ["Bruschetta al Pomodoro"] = {"Pane rustico", "Pomodori maturi", "Aglio", "Basilico fresco"},
     ["Caprese Salad"] = {"Pomodori", "Mozzarella di bufala", "Basilico", "Olio EVO"},
     ["Pasta al Pesto"] = {"Pasta", "Basilico fresco", "Olio d'oliva", "Pinoli"},
-    ["Insalata di Pollo Caesar"] = {"Lattuga romana", "Petto di pollo", "Crostini di pane", "Salsa Caesar"},
+    ["Insalata Caesar"] = {"Lattuga romana", "Petto di pollo", "Crostini di pane", "Salsa Caesar"},
     ["Pasta alla Puttanesca"] = {"Pasta", "Pomodori pelati", "Acciughe sott'olio", "Olive nere"},
     ["Frittata di Verdure"] = {"Uova", "Zucchine", "Pomodori", "Cipolla"},
     ["Risotto al Limone"] = {"Riso Arborio", "Limone", "Brodo vegetale", "Parmigiano grattugiato"}

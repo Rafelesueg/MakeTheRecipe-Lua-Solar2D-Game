@@ -11,6 +11,7 @@ All'avanzamento di ogni livello, saranno assegnati 10 punti e vi sarà un reset 
 * Al superamento di tutti i livelli, sarà mostrato a schermo il punteggio effettuato. -> *LIVELLO * 10 / LIVELLI_DISPONIBILI* 
 > [ La notifica verrà segnalata con un output di testo che darà anche la possibilità di ricominciare. ]
 
+![alt text](https://i.imgur.com/JHcP0Ep_d.webp?maxwidth=760&fidelity=grand)
 
 # Game structure
 Il gioco è stato sviluppato in modo da render **modulabile l'inserimento e rimozione di più ricette**, difatti troviamo due tabelle separate 'piatti' e 'ingredienti'.
